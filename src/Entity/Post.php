@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\PostRepository;
+use App\Entity\Timestamps;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\PostRepository;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
-class Post
+class Post extends Timestamps
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -33,12 +34,10 @@ class Post
     #[ORM\JoinColumn(nullable: false)]
     private ?User $signature = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?Timestamps $timestamps = null;
-
     public function __construct()
     {
-        $this->timestamps = new Timestamps();
+        $this->created_at = new \DateTimeImmutable();
+        $this->deleted_at = null;
     }
 
     public function getId(): ?int
@@ -118,15 +117,4 @@ class Post
         return $this;
     }
 
-    public function getTimestamps(): ?Timestamps
-    {
-        return $this->timestamps;
-    }
-
-    public function setTimestamps(?Timestamps $timestamps): static
-    {
-        $this->timestamps = $timestamps;
-
-        return $this;
-    }
 }

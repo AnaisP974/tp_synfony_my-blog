@@ -2,14 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\OfferRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Timestamps;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\OfferRepository;
 
 #[ORM\Entity(repositoryClass: OfferRepository::class)]
-class Offer
+class Offer extends Timestamps
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -25,20 +24,7 @@ class Offer
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $features = null;
 
-    /**
-     * @var Collection<int, Subscription>
-     */
-    #[ORM\OneToMany(targetEntity: Subscription::class, mappedBy: 'offer')]
-    private Collection $subscriptions;
-
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?Timestamps $timestamps = null;
-
-    public function __construct()
-    {
-        $this->subscriptions = new ArrayCollection();
-        $this->timestamps = new Timestamps();
-    }
+   
 
     public function getId(): ?int
     {
@@ -77,48 +63,6 @@ class Offer
     public function setFeatures(?string $features): static
     {
         $this->features = $features;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Subscription>
-     */
-    public function getSubscriptions(): Collection
-    {
-        return $this->subscriptions;
-    }
-
-    public function addSubscription(Subscription $subscription): static
-    {
-        if (!$this->subscriptions->contains($subscription)) {
-            $this->subscriptions->add($subscription);
-            $subscription->setOffer($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSubscription(Subscription $subscription): static
-    {
-        if ($this->subscriptions->removeElement($subscription)) {
-            // set the owning side to null (unless already changed)
-            if ($subscription->getOffer() === $this) {
-                $subscription->setOffer(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getTimestamps(): ?Timestamps
-    {
-        return $this->timestamps;
-    }
-
-    public function setTimestamps(?Timestamps $timestamps): static
-    {
-        $this->timestamps = $timestamps;
 
         return $this;
     }

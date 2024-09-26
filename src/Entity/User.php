@@ -2,15 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Timestamps;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-class User
+class User extends Timestamps
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -44,15 +45,12 @@ class User
     #[ORM\OneToMany(targetEntity: Subscription::class, mappedBy: 'user_id')]
     private Collection $subscriptions;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Timestamps $timestamps = null;
-
     public function __construct()
     {
         $this->posts = new ArrayCollection();
         $this->subscriptions = new ArrayCollection();
-        $this->timestamps = new Timestamps();
+        // $this->created_at = new \DateTimeImmutable();
+        // $this->deleted_at = null;
     }
 
     public function getId(): ?int
@@ -176,18 +174,6 @@ class User
                 $subscription->setUserId(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getTimestamps(): ?Timestamps
-    {
-        return $this->timestamps;
-    }
-
-    public function setTimestamps(Timestamps $timestamps): static
-    {
-        $this->timestamps = $timestamps;
 
         return $this;
     }

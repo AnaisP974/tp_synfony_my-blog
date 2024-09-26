@@ -2,26 +2,19 @@
 
 namespace App\Entity;
 
-use App\Repository\TimestampsRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\HasLifecycleCallbacks]
-#[ORM\Entity(repositoryClass: TimestampsRepository::class)]
-class Timestamps
+abstract class Timestamps
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
+    protected ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $updated_at = null;
+    protected ?\DateTime $updated_at = null;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $deleted_at = null;
+    protected ?\DateTime $deleted_at = null;
 
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
@@ -36,10 +29,6 @@ class Timestamps
         $this->updated_at = new \DateTimeImmutable();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {

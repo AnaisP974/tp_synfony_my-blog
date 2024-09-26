@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Blog : Home{% endblock %}
+
+{% block body %}
+<main>
+<div class="margin">
+<h1>Welcome to my Blog</h1>
+
+
+<div class="row gap-2">
+{# Afficher les posts les plus récents #}
+
+{% for post in recentPosts  %}
+    <div class="card col-6 col-lg-4" style="width: 18rem;">
+        <img src="{{ post.image}}" class="card-img-top" alt="{{ post.title}}">
+
+        <div class="card-body">
+            <h5 class="card-title">{{ post.title}}</h5>
+            <p class="card-text">{{ post.content|slice(0, 100)  }}</p>
+<a href="{{ path('app_post', {'id': post.id}) }}" class="btn btn-primary">See more</a>
+
+        </div>
+    </div>
+{% endfor %}
+
+</div>
+</div>
+
+{# Boutons pour voir tous les articles #}
+<div class="d-flex align-items-center justify-content-center flex-column p-5 bg-dark text-white w-100">
+    <h2>We currently have {{ totalPosts }} posts</h2>
+<a href="{{ path('app_posts') }}">
+<button class="btn btn-primary">Discover all posts</button></a>
+
+</div>
+{# Lien souscription à la newsletter #}
+
+<div class="margin">
+    <form action="" methods="POST">
+    {# Mettre en place le csrf token #}
+        <input type="hidden" name=""> 
+        
+        <label for="">Subscribe to the newsletter !</label>
+        <input type="email" name="" id="">
+        <button type="submit">Go</button>
+    </form>
+</div>
+</main>
+
+
+
+{% endblock %}

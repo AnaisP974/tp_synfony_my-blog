@@ -7,7 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SubscriptionRepository::class)]
-class Subscription
+class Subscription extends Timestamps
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -28,14 +28,12 @@ class Subscription
     #[ORM\JoinColumn(nullable: false)]
     private ?Offer $offer_id = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?Timestamps $timestamps = null;
-
     public function __construct()
     {
-        $this->timestamps = new Timestamps();
+        $this->end_date = new \DateTimeImmutable('+30 days');
+        // $this->created_at = new \DateTimeImmutable();
+        // $this->deleted_at = null;
     }
-
 
     public function getId(): ?int
     {
@@ -86,18 +84,6 @@ class Subscription
     public function setOfferId(?Offer $offer_id): static
     {
         $this->offer_id = $offer_id;
-
-        return $this;
-    }
-
-    public function getTimestamps(): ?Timestamps
-    {
-        return $this->timestamps;
-    }
-
-    public function setTimestamps(?Timestamps $timestamps): static
-    {
-        $this->timestamps = $timestamps;
 
         return $this;
     }

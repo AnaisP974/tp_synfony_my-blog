@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My blog : Posts
+{% endblock %}
+
+{% block body %}
+	<main>
+		<div class="margin">
+			<h1>The posts</h1>
+
+
+			<div
+				class="row gap-2">
+				{# Afficher les posts les plus récents #}
+
+				{% for post in posts  %}
+					<div class="card col-6 col-lg-4" style="width: 18rem;">
+						<img src="{{ post.image}}" class="card-img-top" alt="{{ post.title}}">
+
+						<div class="card-body">
+							<h5 class="card-title">{{ post.title}}</h5>
+                            {% if post.isPremium %}
+								<p class="card-text text-danger">
+									<span>Content reserved for premium subscribers</span>
+								</p>
+							{% else %}
+								<p class="card-text">{{ post.content|slice(0, 100)  }}</p>
+							{% endif %}
+                            <div class="d-flex justify-content-center">
+<a href="{{ path('app_post', {'id': post.id}) }}" class="btn {% if post.isPremium %}btn-warning {% else %}btn-primary{% endif %}">See more</a>
+
+                            </div>
+
+
+
+						</div>
+					</div>
+				{% endfor %}
+
+			</div>
+		</div>
+	</main>
+
+{% endblock %}
